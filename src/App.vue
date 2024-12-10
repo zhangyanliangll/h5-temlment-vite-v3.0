@@ -27,5 +27,3 @@ const cacheStore = useCacheStore()
 
 const cachedViews = computed(() => cacheStore.cachedViews)
 </script>
-
-<style lang="scss" scoped></style>
