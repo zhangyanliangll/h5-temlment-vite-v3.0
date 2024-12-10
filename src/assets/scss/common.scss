@@ -1,0 +1,71 @@
+@use "mixin.scss" as mixin;
+
+@for $i from 1 through 30 {
+  .mt-#{$i} {
+    margin-top: #{$i}px;
+  }
+  .mb-#{$i} {
+    margin-bottom: #{$i}px;
+  }
+  .ml-#{$i} {
+    margin-left: #{$i}px;
+  }
+  .mr-#{$i} {
+    margin-right: #{$i}px;
+  }
+}
+
+// flex布局
+
+.flex {
+  display: flex;
+}
+
+// flex 布局
+@mixin flex($direction: row) {
+  display: flex;
+  flex-direction: $direction;
+}
+
+$flex-directions: row, row-reverse, column, column-reverse;
+@each $v in $flex-directions {
+  .flex-#{$v} {
+    @include flex($v);
+  }
+}
+
+$justify-content: start, end, center, between, around, evenly;
+@each $v in $justify-content {
+  .justify-#{$v} {
+    @if ($v == "start") {
+      justify-content: flex- + $v;
+    } @else if($v == "start") {
+      justify-content: flex- + $v;
+    } @else {
+      justify-content: $v;
+    }
+  }
+}
+
+$align-items: start, end, center, baseline, stretch;
+@each $v in $align-items {
+  .items-#{$v} {
+    @if ($v == "start") {
+      align-items: flex- + $v;
+    } @else if($v == "start") {
+      align-items: flex- + $v;
+    } @else {
+      align-items: $v;
+    }
+  }
+}
+
+.link-style {
+  color: #108ee9;
+  @include mixin.text-line();
+  &:hover {
+    cursor: pointer;
+    color: #108ee9;
+    text-decoration: underline;
+  }
+}

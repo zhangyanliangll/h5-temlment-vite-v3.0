@@ -1,0 +1,7 @@
+# eslint 忽略检查 (根据项目需要自行添加)
+.vscode
+node_modules
+dist
+src/manifest.json
+src/pages.json
+*.d.ts
