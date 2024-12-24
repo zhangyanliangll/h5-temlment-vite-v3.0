@@ -32,18 +32,15 @@ defineOptions({
 const route = useRoute()
 
 const navBarTitle = computed<string>(() => {
-  const { title = '' }: ObjectType = route?.meta || {}
-  return title
+  return route?.meta.title || ''
 })
 
 const isHideNavBar = computed<boolean>(() => {
-  const { isHideNavBar = false }: ObjectType = route?.meta || {}
-  return isHideNavBar
+  return !!route?.meta?.isHideNavBar
 })
 
 const isHideBack = computed<boolean>(() => {
-  const { isHideBack = false }: ObjectType = route?.meta || {}
-  return isHideBack
+  return !!route?.meta?.isHideBack
 })
 
 const { navigateBack } = UseNavigation()

@@ -22,6 +22,12 @@ export const beforeRouter = (router: Router): void => {
 
       NProgress.start()
 
+      const { title = '' } = to?.meta || {}
+
+      if (title) {
+        document.title = title
+      }
+
       if (to.meta.keepAlive) {
         cacheStore.addView(to.name as string)
       } else {
