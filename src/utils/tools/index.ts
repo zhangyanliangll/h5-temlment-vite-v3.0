@@ -4,32 +4,38 @@ import dayjs from 'dayjs'
  * @description: 节流函数
  * @param {Function} fn 回调
  * @param {Number} wait 延迟
+ * @returns {Function} 节流后的函数
  */
-export function throttle(fn: (...args: any) => void, wait = 1000): any {
-  let pre = Date.now()
-  return function (this: any, ...rest: any) {
+export function throttle(
+  fn: (...args: any[]) => void,
+  wait = 1000,
+): (...args: any[]) => void {
+  let lastTime = 0
+
+  return function (this: any, ...args: any[]) {
     const now = Date.now()
-    if (now - pre >= wait) {
-      fn.apply(this, rest)
-      pre = Date.now()
+    if (now - lastTime >= wait) {
+      fn.apply(this, args)
+      lastTime = now
     }
   }
 }
 
 /**
  * @description: 防抖函数
- * @param {*}
- * @return {*}
+ * @param {Function} func 回调函数
+ * @param {Number} delay 延迟时间
+ * @returns {Function} 防抖后的函数
  */
 export function debounce(
-  func: (...args: any) => void,
+  func: (...args: any[]) => void,
   delay = 500,
-): (...args: any) => void {
-  let timeout: any = null
-  return function (this: any, ...args: any) {
+): (...args: any[]) => void {
+  let timeout: ReturnType<typeof setTimeout> | null = null
+
+  return function (this: any, ...args: any[]) {
     if (timeout) {
       clearTimeout(timeout)
-      timeout = null
     }
     timeout = setTimeout(() => {
       func.apply(this, args)
@@ -39,30 +45,41 @@ export function debounce(
 
 /**
  * @description: 清空cookie
- * @param {*} void
- * @return {*}
+ * @return {void}
  */
 export const cleanCookie = (): void => {
   const date = new Date()
-  date.setTime(date.getTime() - 10000)
-  // eslint-disable-next-line no-useless-escape
-  const keys = document.cookie.match(/[^ =;]+(?=\=)/g)
-  console.log('需要删除的cookie名字：' + keys)
+  date.setTime(date.getTime() - 10000) // 设置过去的时间，使得 cookie 过期
+  const keys = document.cookie.match(/[^ =;]+(?==)/g) // 匹配所有 cookie 的键名，去掉不必要的转义字符
+  console.log('需要删除的cookie名字：', keys)
+
   if (keys) {
-    for (let i = keys.length; i--; )
-      document.cookie =
-        keys[i] + '=0; expire=' + date.toUTCString() + '; path=/'
+    keys.forEach((key) => {
+      document.cookie = `${key}=0; expire=${date.toUTCString()}; path=/;`
+    })
   }
 }
 
 /**
  * @description: 设置cookie
- * @param {string} name
- * @param {string} value
- * @return {*}
+ * @param {string} name cookie名称
+ * @param {string} value cookie值
+ * @param {number} [expiresDays=365] cookie过期天数
+ * @param {boolean} [secure=false] 是否仅在 HTTPS 下传输 cookie
+ * @param {string} [sameSite='Lax'] SameSite 属性
+ * @return {void}
  */
-export const setCookie = (name: string, value: string): void => {
-  document.cookie = name + '=' + escape(value)
+export const setCookie = (
+  name: string,
+  value: string,
+  expiresDays: number = 365,
+  secure: boolean = false,
+  sameSite: 'Lax' | 'Strict' | 'None' = 'Lax',
+): void => {
+  const date = new Date()
+  date.setTime(date.getTime() + expiresDays * 24 * 60 * 60 * 1000) // 设置过期时间
+  const cookieValue = `${encodeURIComponent(value)}; expires=${date.toUTCString()}; path=/; SameSite=${sameSite}${secure ? '; Secure' : ''}`
+  document.cookie = `${name}=${cookieValue}`
 }
 
 /**
@@ -138,41 +155,4 @@ export function partPrint(el: any, zoom = 1, initStyle = '', cb?: () => void) {
       cb && cb()
     }, 100)
   }
-}
-
-// 转换成大写
-export const toFormaterChies = (value: any) => {
-  // 是否是合理数字
-  if (!/^(0|[1-9]\d*)(\.\d+)?$/.test(value)) {
-    return
-  }
-  let unit = '仟佰拾亿仟佰拾万仟佰拾元角分'
-  let str = ''
-  value += '00'
-  // 是否包含小数点
-  const p = value.indexOf('.')
-  if (p >= 0) {
-    // 只取小数后两位
-    value = value.substring(0, p) + value.substr(p + 1, 2)
-  }
-  // 截取单位
-  unit = unit.substr(unit.length - value.length)
-  for (let i = 0; i < value.length; i++) {
-    // 拼接数字和单位
-    str +=
-      '零壹贰叁肆伍陆柒捌玖'.charAt(Number(value.charAt(i))) + unit.charAt(i)
-  }
-  if (str === '零元零角零分') {
-    return '零元整'
-  }
-  return (
-    str
-      .replace(/零(仟|佰|拾|角)/g, '零')
-      .replace(/(零)+/g, '零')
-      .replace(/零(万|亿|元)/g, '$1')
-      // .replace(/(亿)万|壹(拾)/g, '$1$2')
-      .replace(/(亿)万/g, '$1')
-      .replace(/^元零?|零分/g, '')
-      .replace(/元$/g, '元整')
-  )
 }

@@ -21,6 +21,16 @@ export function isNumber(data: unknown): boolean {
   return typeof data === 'number' && !isNaN(data)
 }
 
+// 是否是 URL
+export function isUrl(data: string): boolean {
+  try {
+    new URL(data)
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
 // 是否 为空
 export function isEmpty(value: unknown): boolean {
   if (value == null) {
