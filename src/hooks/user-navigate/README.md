@@ -14,7 +14,6 @@ import useRouter from '@/hooks/user-navigate';
 export default defineComponent({
     setup() {
      const { navigateTo } = useRouter()
-
   }
 </script>;
 ```

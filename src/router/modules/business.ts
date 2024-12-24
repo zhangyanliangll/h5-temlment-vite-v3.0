@@ -9,6 +9,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: '首页',
       keepAlive: true,
+      isHideBack: true,
     },
   },
   {
