@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineOptions({
-  name: 'about',
+  name: 'AboutPage',
 })
 
 const router = useRouter()
