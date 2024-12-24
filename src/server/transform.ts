@@ -57,12 +57,12 @@ async function transformFile(
     // 多文件
     await Promise.all(
       (file as File[]).map((item) => {
-        formData.append(key, item, (item as { fileName?: string }).fileName)
+        formData.append(key, item, item.name)
         return true
       }),
     )
   } else {
     // 单文件
-    formData.append(key, file, (file as { fileName?: string }).fileName)
+    formData.append(key, file, (file as File).name)
   }
 }

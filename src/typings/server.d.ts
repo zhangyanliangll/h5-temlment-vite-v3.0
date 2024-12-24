@@ -41,5 +41,7 @@ declare namespace FetchResponse {
     errorTitle?: string
     /** 是否获取源数据 */
     isOriginalData?: boolean
+    /** 是否 JSON 数据 */
+    isJson?: boolean
   }
 }

@@ -43,7 +43,11 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       preprocessorOptions: {
         // 导入scss预编译程序
         scss: {
-          additionalData: `@use "@/assets/scss/index.scss" as *;`,
+          additionalData: `
+            @use "@/assets/scss/variables.scss" as *;
+            @use "@/assets/scss/mixin.scss" as *;
+            @use "@/assets/scss/common.scss" as *;
+          `,
         },
       },
     },
