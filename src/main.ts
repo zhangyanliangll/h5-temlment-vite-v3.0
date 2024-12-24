@@ -9,6 +9,12 @@ import { isTest } from '@/config'
 // 引入组件样式
 import 'vant/lib/index.css'
 
+// 重置样式
+import '@/assets/scss/reset.scss'
+
+// 重置 UI 样式
+import '@/assets/scss/reset-ui.scss'
+
 // 注册 全局公共 方法
 import '@/utils/inject'
 

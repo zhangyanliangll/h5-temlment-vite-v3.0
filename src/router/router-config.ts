@@ -4,6 +4,11 @@ import type {
   Router,
 } from 'vue-router'
 
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+
+NProgress.configure({ showSpinner: false })
+
 import { useCacheStore } from '@/stores/cache'
 
 export const beforeRouter = (router: Router): void => {
@@ -15,6 +20,8 @@ export const beforeRouter = (router: Router): void => {
     ) => {
       const cacheStore = useCacheStore()
 
+      NProgress.start()
+
       if (to.meta.keepAlive) {
         cacheStore.addView(to.name as string)
       } else {
@@ -22,6 +29,8 @@ export const beforeRouter = (router: Router): void => {
       }
 
       next()
+
+      NProgress.done()
     },
   )
 }
