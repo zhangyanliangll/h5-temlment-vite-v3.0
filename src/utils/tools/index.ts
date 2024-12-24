@@ -51,7 +51,6 @@ export const cleanCookie = (): void => {
   const date = new Date()
   date.setTime(date.getTime() - 10000) // 设置过去的时间，使得 cookie 过期
   const keys = document.cookie.match(/[^ =;]+(?==)/g) // 匹配所有 cookie 的键名，去掉不必要的转义字符
-  console.log('需要删除的cookie名字：', keys)
 
   if (keys) {
     keys.forEach((key) => {
