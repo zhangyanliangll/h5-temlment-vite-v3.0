@@ -18,4 +18,4 @@ export default defineComponent({
 </script>;
 ```
 
-详见 usenNvigate/index.js
+详见 usenNvigate/index.ts

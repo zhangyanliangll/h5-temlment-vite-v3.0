@@ -1,4 +1,3 @@
-import { useRouter } from 'vue-router'
 import type { RouteLocationRaw } from 'vue-router'
 import type { UseNavigation } from './user-navigate'
 
