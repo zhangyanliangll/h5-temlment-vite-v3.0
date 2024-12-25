@@ -1,3 +1,9 @@
+// 是否是 IOS
+export function isIOS(): boolean {
+  const userAgent = navigator.userAgent || ''
+  return /iPad|iPhone|iPod/.test(userAgent) && !('MSStream' in window)
+}
+
 // 是否是 文件
 export function isFile(data: unknown): boolean {
   return (

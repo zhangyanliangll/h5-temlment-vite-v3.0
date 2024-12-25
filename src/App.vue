@@ -1,6 +1,6 @@
 <template>
   <van-nav-bar
-    v-if="!isHideNavBar"
+    v-if="!isHideNavBar && navBarTitle"
     :title="navBarTitle"
     :left-text="isHideBack ? '' : '返回'"
     :left-arrow="!isHideBack"
