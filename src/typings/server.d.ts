@@ -43,5 +43,7 @@ declare namespace FetchResponse {
     isOriginalData?: boolean
     /** 是否 JSON 数据 */
     isJson?: boolean
+    /** 是否 下载/导出文件 */
+    isDownload?: boolean
   }
 }

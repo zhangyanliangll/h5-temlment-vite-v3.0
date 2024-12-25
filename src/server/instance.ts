@@ -55,13 +55,7 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   (response: AxiosResponse<FetchResponse.Response>) => {
     const { status, config } = response
-    let { data } = response
-
-    const { isJson }: ObjectType = config
-
-    if (isJson) {
-      data = JSON.parse(data as unknown as string)
-    }
+    const { data } = response
 
     const code = Number(data.code)
 

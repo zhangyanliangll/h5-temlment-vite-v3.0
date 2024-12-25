@@ -1,14 +1,32 @@
 import instance from './instance'
+import type { AxiosResponse } from 'axios'
 import type { FetchResponse } from '@/typings/server'
 
-/**
- * @param params - 请求参数
- * - url: 请求地址
- * - method: 请求方法(默认get)
- * - data: 请求的body的data
- * - axiosConfig: axios配置
- * @param axiosConfig
- */
+// 文件下载处理函数
+const handleDownload = (response: AxiosResponse) => {
+  const disposition = response.headers['content-disposition']
+  const contentType = response.headers['content-type']
+
+  // 判断是否为文件下载请求
+  if (
+    disposition ||
+    (response.config as FetchResponse.AxiosConfig).isDownload
+  ) {
+    const blob = new Blob([response.data], { type: contentType })
+    const fileName = disposition
+      ? decodeURIComponent(disposition.match(/filename=(\S*)/)[1] || 'download')
+      : 'download'
+
+    const link = document.createElement('a')
+    link.href = window.URL.createObjectURL(blob)
+    link.download = fileName
+    link.click()
+    window.URL.revokeObjectURL(link.href)
+    return true
+  }
+  return false
+}
+
 export function request(
   params: ObjectType,
   axiosConfig?: FetchResponse.AxiosConfig,
@@ -35,23 +53,37 @@ export function request(
 
   return new Promise((resolve, reject) => {
     instance(handleConfig)
-      .then((response: ObjectType) => {
-        const {
-          config: { responseType, isOriginalData },
-          data,
-        } = response
+      .then(
+        (
+          response: AxiosResponse<FetchResponse.Response> & {
+            config: FetchResponse.AxiosConfig
+          },
+        ) => {
+          const {
+            config: { isOriginalData, isJson },
+            data,
+          } = response
 
-        if (responseType === 'blob') {
-          return resolve(response)
-        }
+          // 处理文件下载
+          if (handleDownload(response)) {
+            return response
+          }
 
-        if (isOriginalData) {
-          return resolve(data)
-        }
+          if (isOriginalData) {
+            return resolve(data)
+          }
 
-        //对接口错误码做处理
-        resolve(data.data || data.record)
-      })
+          if (isJson) {
+            return resolve(JSON.parse(data as unknown as string))
+          }
+
+          //对接口错误码做处理
+          resolve(
+            (data as { data?: any })?.data ||
+              (data as { record?: any })?.record,
+          )
+        },
+      )
       .catch((err: any) => {
         reject(err)
       })
