@@ -90,9 +90,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       }),
       Commonjs(),
       viteCompression(),
-      vueDevTools({
-        launchEditor: 'webstorm',
-      }),
+      vueDevTools(),
     ],
     define: {
       __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false,
