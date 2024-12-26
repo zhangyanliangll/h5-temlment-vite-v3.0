@@ -8,14 +8,13 @@ const handleDownload = (response: AxiosResponse) => {
   const contentType = response.headers['content-type']
 
   // 判断是否为文件下载请求
-  if (
-    disposition ||
-    (response.config as FetchResponse.AxiosConfig).isDownload
-  ) {
+  let fileName = (response.config as FetchResponse.AxiosConfig).fileName || ''
+
+  if (disposition || fileName) {
     const blob = new Blob([response.data], { type: contentType })
-    const fileName = disposition
+    fileName = disposition
       ? decodeURIComponent(disposition.match(/filename=(\S*)/)[1] || 'download')
-      : 'download'
+      : fileName
 
     const link = document.createElement('a')
     link.href = window.URL.createObjectURL(blob)
